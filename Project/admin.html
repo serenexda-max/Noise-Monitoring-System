@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Noise Monitoring System</title>
+    <link rel="stylesheet" href="style1.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1><i class="fas fa-volume-up"></i> Noise Monitoring System</h1>
+                <p class="subtitle">Admin Dashboard</p>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Admin User</span>
+                </div>
+                <button id="logoutBtn" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Current Noise Level Card -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-chart-line"></i> Current Noise Level</h2>
+                    <p class="last-updated">Updated: <span id="lastUpdated">Just now</span></p>
+                </div>
+                
+                <div class="noise-level-display">
+                    <div class="decibel-value" id="decibelValue">-- dB</div>
+                    <div class="noise-status" id="noiseStatus">Waiting for data...</div>
+                </div>
+                
+                <div class="noise-indicator">
+                    <div class="indicator-bar">
+                        <div class="indicator-fill" id="indicatorFill"></div>
+                    </div>
+                    <div class="indicator-labels">
+                        <span class="quiet-label">Quiet</span>
+                        <span class="moderate-label">Moderate</span>
+                        <span class="loud-label">Loud</span>
+                    </div>
+                </div>
+                
+                <div class="threshold-info">
+                    <div class="threshold-item">
+                        <span class="threshold-color quiet"></span>
+                        <span class="threshold-text">Quiet: &lt; 60 dB</span>
+                    </div>
+                    <div class="threshold-item">
+                        <span class="threshold-color moderate"></span>
+                        <span class="threshold-text">Moderate: 60-80 dB</span>
+                    </div>
+                    <div class="threshold-item">
+                        <span class="threshold-color loud"></span>
+                        <span class="threshold-text">Loud: &gt; 80 dB</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Readings -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-history"></i> Recent Readings</h2>
+                </div>
+                
+                <div class="readings-container">
+                    <table class="readings-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Decibel Level</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="readingsTable">
+                            <!-- Data will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Quick Controls -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-sliders-h"></i> System Controls</h2>
+                </div>
+                
+                <div class="controls">
+                    <button id="simulateQuiet" class="btn-control quiet">
+                        <i class="fas fa-volume-off"></i> Simulate Quiet (40-59 dB)
+                    </button>
+                    <button id="simulateModerate" class="btn-control moderate">
+                        <i class="fas fa-volume-down"></i> Simulate Moderate (60-80 dB)
+                    </button>
+                    <button id="simulateLoud" class="btn-control loud">
+                        <i class="fas fa-volume-up"></i> Simulate Loud (81-100 dB)
+                    </button>
+                    <button id="autoSimulate" class="btn-control auto">
+                        <i class="fas fa-play"></i> Auto Simulate
+                    </button>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Noise Monitoring System &copy; 2023 | Admin Dashboard</p>
+            <p class="system-status">System Status: <span class="status-active">Active</span></p>
+        </footer>
+    </div>
+    
+    <script src="script1.js"></script>
+</body>
+</html>
