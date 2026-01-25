@@ -1,2 +1,0 @@
-# Noise-Monitoring-System
-WIP
