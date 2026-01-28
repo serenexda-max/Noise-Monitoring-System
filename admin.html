@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Noise Monitoring System</title>
+    <link rel="stylesheet" href="style1.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1><i class="fas fa-volume-up"></i> Noise Monitoring System</h1>
+                <p class="subtitle">Admin Dashboard</p>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Admin User</span>
+                </div>
+                <button id="logoutBtn" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Current Noise Level Card -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-chart-line"></i> Current Noise Level</h2>
+                    <p class="last-updated">Updated: <span id="lastUpdated">Just now</span></p>
+                </div>
+                
+                <div class="noise-level-display">
+                    <div class="decibel-value" id="decibelValue">-- dB</div>
+                    <div class="noise-status" id="noiseStatus">Waiting for data...</div>
+                </div>
+                
+                <div class="noise-indicator">
+                    <div class="indicator-bar">
+                        <div class="indicator-fill" id="indicatorFill"></div>
+                    </div>
+                    <div class="indicator-labels">
+                        <span class="quiet-label">Quiet</span>
+                        <span class="moderate-label">Moderate</span>
+                        <span class="loud-label">Loud</span>
+                    </div>
+                </div>
+                
+                <div class="threshold-info">
+                    <div class="threshold-item">
+                        <span class="threshold-color quiet"></span>
+                        <span class="threshold-text">Quiet: &lt; 60 dB</span>
+                    </div>
+                    <div class="threshold-item">
+                        <span class="threshold-color moderate"></span>
+                        <span class="threshold-text">Moderate: 60-80 dB</span>
+                    </div>
+                    <div class="threshold-item">
+                        <span class="threshold-color loud"></span>
+                        <span class="threshold-text">Loud: &gt; 80 dB</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Adviser Management Card -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-chalkboard-teacher"></i> Adviser Management</h2>
+                    <div class="adviser-summary">
+                        <span class="summary-item present">
+                            <i class="fas fa-user-check"></i> <span id="presentCount">0</span> Present
+                        </span>
+                        <span class="summary-item on-leave">
+                            <i class="fas fa-umbrella-beach"></i> <span id="onLeaveCount">0</span> On Leave
+                        </span>
+                        <span class="summary-item absent">
+                            <i class="fas fa-user-slash"></i> <span id="absentCount">0</span> Absent
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="adviser-management-container">
+                    <!-- Add New Adviser Form -->
+                    <div class="add-adviser-form">
+                        <h3><i class="fas fa-user-plus"></i> Add New Adviser</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="text" id="adviserName" placeholder="Adviser Name" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="adviserSubject" placeholder="Subject" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="adviserNumber" placeholder="Contact Number" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <select id="adviserStatus" class="form-select">
+                                    <option value="present">Present</option>
+                                    <option value="on-leave">On Leave</option>
+                                    <option value="absent">Absent</option>
+                                </select>
+                            </div>
+                            <button id="addAdviserBtn" class="btn-add">
+                                <i class="fas fa-plus"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Advisers Table -->
+                    <div class="advisers-table-container">
+                        <div class="table-header">
+                            <h3><i class="fas fa-list"></i> Advisers List</h3>
+                            <div class="table-actions">
+                                <button id="smsAllBtn" class="btn-action">
+                                    <i class="fas fa-broadcast-tower"></i> Broadcast SMS
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="table-wrapper">
+                            <table class="advisers-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Subject</th>
+                                        <th>Contact Number</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="advisersTable">
+                                    <!-- Advisers will be populated by JavaScript -->
+                                    <tr class="empty-row">
+                                        <td colspan="5" class="empty-message">
+                                            <i class="fas fa-user-slash"></i>
+                                            No advisers added yet. Add your first adviser above.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- SMS Configuration -->
+                    <div class="sms-configuration">
+                        <h3><i class="fas fa-sms"></i> SMS Configuration</h3>
+                        <div class="config-content">
+                            <div class="config-item">
+                                <label class="config-toggle">
+                                    <input type="checkbox" id="enableSms" checked>
+                                    <span class="toggle-slider"></span>
+                                    <span class="toggle-label">Enable SMS Notifications</span>
+                                </label>
+                                <p class="config-description">
+                                    Send SMS alerts to present advisers when noise level is loud (&gt; 80 dB)
+                                </p>
+                            </div>
+                            
+                            <div class="config-item">
+                                <label>SMS Message Template:</label>
+                                <textarea id="smsTemplate" class="sms-template" rows="3">
+URGENT: High noise level detected in your classroom. Current level: {level} dB ({status}).
+                                </textarea>
+                                <small class="template-help">
+                                    Use {level} for decibel value and {status} for noise status
+                                </small>
+                            </div>
+                            
+                            <div class="sms-stats">
+                                <div class="stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <div class="stat-value" id="totalSmsSent">0</div>
+                                        <div class="stat-label">Total SMS Sent</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-user-check"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <div class="stat-value" id="activeAdvisers">0</div>
+                                        <div class="stat-label">Active Advisers</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Wall Checker Card -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-border-style"></i> Wall Checker</h2>
+                    <p class="wall-summary">Walls: <span id="wallSummary">2 Concrete, 2 Plywood</span></p>
+                </div>
+                
+                <div class="wall-checker-container">
+                    <div class="wall-diagram">
+                        <div class="room-layout">
+                            <div class="wall-north wall-item" data-side="north">
+                                <div class="wall-label">North Wall</div>
+                                <div class="wall-toggle-container">
+                                    <span class="wall-type-label">Concrete</span>
+                                    <label class="wall-toggle">
+                                        <input type="checkbox" id="wallNorthToggle">
+                                        <span class="wall-toggle-slider"></span>
+                                    </label>
+                                    <span class="wall-type-label">Plywood</span>
+                                </div>
+                            </div>
+                            
+                            <div class="room-center">
+                                <div class="room-content">
+                                    <i class="fas fa-microphone-alt"></i>
+                                    <span>Noise Sensor</span>
+                                </div>
+                            </div>
+                            
+                            <div class="wall-east wall-item" data-side="east">
+                                <div class="wall-label">East Wall</div>
+                                <div class="wall-toggle-container">
+                                    <span class="wall-type-label">Concrete</span>
+                                    <label class="wall-toggle">
+                                        <input type="checkbox" id="wallEastToggle">
+                                        <span class="wall-toggle-slider"></span>
+                                    </label>
+                                    <span class="wall-type-label">Plywood</span>
+                                </div>
+                            </div>
+                            
+                            <div class="wall-south wall-item" data-side="south">
+                                <div class="wall-label">South Wall</div>
+                                <div class="wall-toggle-container">
+                                    <span class="wall-type-label">Concrete</span>
+                                    <label class="wall-toggle">
+                                        <input type="checkbox" id="wallSouthToggle">
+                                        <span class="wall-toggle-slider"></span>
+                                    </label>
+                                    <span class="wall-type-label">Plywood</span>
+                                </div>
+                            </div>
+                            
+                            <div class="wall-west wall-item" data-side="west">
+                                <div class="wall-label">West Wall</div>
+                                <div class="wall-toggle-container">
+                                    <span class="wall-type-label">Concrete</span>
+                                    <label class="wall-toggle">
+                                        <input type="checkbox" id="wallWestToggle">
+                                        <span class="wall-toggle-slider"></span>
+                                    </label>
+                                    <span class="wall-type-label">Plywood</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="wall-info-section">
+                        <div class="wall-stats">
+                            <h4><i class="fas fa-chart-pie"></i> Wall Composition</h4>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <span class="stat-label">Concrete Walls:</span>
+                                    <span class="stat-value" id="concreteCount">2</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Plywood Walls:</span>
+                                    <span class="stat-value" id="plywoodCount">2</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Noise Adjustment:</span>
+                                    <span class="stat-value" id="noiseAdjustment">Medium</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="wall-material-info">
+                            <h4><i class="fas fa-info-circle"></i> How Walls Affect Readings</h4>
+                            <div class="material-details">
+        <div class="material-item concrete">
+            <div class="material-icon">
+                <i class="fas fa-hard-hat"></i>
+            </div>
+            <div class="material-text">
+                <h5>Concrete Walls</h5>
+                <p>Thick walls keep noise INSIDE. Readings will be <strong>HIGHER</strong> for noise generated in this classroom.</p>
+            </div>
+        </div>
+        <div class="material-item plywood">
+            <div class="material-icon">
+                <i class="fas fa-tree"></i>
+            </div>
+            <div class="material-text">
+                <h5>Plywood Walls</h5>
+                <p>Thin walls let noise ESCAPE. Readings will be <strong>LOWER</strong> for noise generated in this classroom.</p>
+            </div>
+        </div>
+    </div>
+                        </div>
+                        
+                        <div class="wall-controls">
+                            <button id="setAllConcrete" class="wall-control-btn concrete-btn">
+                                <i class="fas fa-hard-hat"></i> Set All Concrete
+                            </button>
+                            <button id="setAllPlywood" class="wall-control-btn plywood-btn">
+                                <i class="fas fa-tree"></i> Set All Plywood
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            
+            <!-- Recent Readings -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-header-left">
+                        <h2><i class="fas fa-history"></i> Recent Readings</h2>
+                    </div>
+                    <div class="card-header-right">
+                        <button id="clearReadingsBtn" class="btn-clear">
+                            <i class="fas fa-trash-alt"></i> Clear Readings
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="readings-container">
+                    <table class="readings-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Source dB</th>
+                                <th>Measured dB</th>
+                                <th>Status</th>
+                                <th>SMS Sent</th>
+                                <th>To</th>
+                            </tr>
+                        </thead>
+                        <tbody id="readingsTable">
+                            <!-- Data will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- System Controls -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-sliders-h"></i> System Controls</h2>
+                </div>
+                
+                <div class="system-controls-container">
+                    <div class="controls-grid">
+                        <button id="simulateQuiet" class="btn-control quiet">
+                            <i class="fas fa-volume-off"></i> Simulate Quiet (40-59 dB)
+                        </button>
+                        <button id="simulateModerate" class="btn-control moderate">
+                            <i class="fas fa-volume-down"></i> Simulate Moderate (60-80 dB)
+                        </button>
+                        <button id="simulateLoud" class="btn-control loud">
+                            <i class="fas fa-volume-up"></i> Simulate Loud (81-100 dB)
+                        </button>
+                        <button id="autoSimulate" class="btn-control auto">
+                            <i class="fas fa-play"></i> Auto Simulate
+                        </button>
+                    </div>
+                    
+                    <div class="test-section">
+                        <div class="test-sms">
+                            <h4><i class="fas fa-comment-sms"></i> Test SMS System</h4>
+                            <p>Send a test SMS to all present advisers</p>
+                            <button id="testSmsBtn" class="btn-test-sms">
+                                <i class="fas fa-paper-plane"></i> Send Test SMS
+                            </button>
+                        </div>
+                        
+                        <div class="system-status">
+                            <h4><i class="fas fa-info-circle"></i> System Status</h4>
+                            <div class="status-items">
+                                <div class="status-item">
+                                    <span class="status-label">SIM800L:</span>
+                                    <span class="status-value" id="sim800lStatus">Ready</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="status-label">Advisers:</span>
+                                    <span class="status-value" id="adviserSystemStatus">Active</span>
+                                </div>
+                                <div class="status-item">
+                                    <span class="status-label">Walls:</span>
+                                    <span class="status-value" id="wallSystemStatus">Configured</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Noise Monitoring System &copy; 2026 | Admin Dashboard</p>
+            <p class="system-status">
+                Status: <span class="status-active">Active</span> | 
+                SMS: <span id="footerSmsStatus">Enabled</span> | 
+                Advisers: <span id="footerAdviserStatus">0 Present</span> |
+                Walls: <span id="footerWallStatus">Mixed</span>
+            </p>
+        </footer>
+    </div>
+    
+    <!-- Edit Adviser Modal -->
+    <div class="modal-overlay" id="editModalOverlay">
+        <div class="modal" id="editModal">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-edit"></i> Edit Adviser</h3>
+                <button class="modal-close" id="closeEditModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Adviser Name</label>
+                    <input type="text" id="editAdviserName" class="modal-input">
+                </div>
+                <div class="form-group">
+                    <label>Subject</label>
+                    <input type="text" id="editAdviserSubject" class="modal-input">
+                </div>
+                <div class="form-group">
+                    <label>Contact Number</label>
+                    <input type="text" id="editAdviserNumber" class="modal-input">
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="editAdviserStatus" class="modal-select">
+                        <option value="present">Present</option>
+                        <option value="on-leave">On Leave</option>
+                        <option value="absent">Absent</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelEditBtn" class="btn-secondary">Cancel</button>
+                <button id="saveAdviserBtn" class="btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script1.js"></script>
+</body>
+</html>
